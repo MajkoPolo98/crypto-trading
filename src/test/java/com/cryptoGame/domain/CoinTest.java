@@ -11,7 +11,7 @@ class CoinTest {
 
     @Test
     void getName() {
-        Coin coin = new Coin("BTC", "Bitcoin", new BigDecimal("60000"));
+        Coin coin = new Coin("BTC", "Bitcoin", new BigDecimal("60000"), "google.com");
 
         String symbol = coin.getSymbol();
 
