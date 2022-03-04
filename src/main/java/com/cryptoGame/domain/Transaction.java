@@ -25,8 +25,8 @@ public class Transaction {
     @Column(name = "transaction_date", nullable = false)
     private LocalDate transactionDate = LocalDate.now();
 
-    @Column(name = "crypto_name", nullable = false)
-    private String cryptoName;
+    @Column(name = "crypto_symbol", nullable = false)
+    private String cryptoSymbol;
 
     @Column(name = "crypto_amount", nullable = false)
     private BigDecimal cryptoAmount;
