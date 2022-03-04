@@ -27,6 +27,4 @@ public class TransactionDto {
     @JsonProperty("bought_for")
     private BigDecimal boughtFor;
 
-    @JsonProperty("worth_now")
-    private BigDecimal worthNow;
 }

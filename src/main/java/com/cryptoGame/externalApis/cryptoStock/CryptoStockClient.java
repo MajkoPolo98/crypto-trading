@@ -7,7 +7,6 @@ import java.util.List;
 
 public interface CryptoStockClient {
     List<CoinDto> getCoins(String... coinSymbols);
-    CoinDto getCoin(String coinSymbol);
     BigDecimal getPrice(String coinSymbol);
 
 }

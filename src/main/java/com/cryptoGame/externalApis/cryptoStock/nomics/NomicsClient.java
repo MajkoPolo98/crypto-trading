@@ -46,16 +46,9 @@ public class NomicsClient implements CryptoStockClient {
         }
     }
 
-    @Override
-    public CoinDto getCoin(String coinSymbol) {
-/*        URI url = UriComponentsBuilder.fromHttpUrl(
-                config.getNomicsApi() + ""
-        )*/
-        return null;
-    }
 
     @Override
     public BigDecimal getPrice(String coinSymbol) {
-        return null;
+        return getCoins(coinSymbol).get(0).getPrice();
     }
 }

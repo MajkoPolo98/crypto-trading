@@ -18,9 +18,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class StockController {
 
-    @Autowired
-    private NomicsClient nomicsClient;
-
+    private final NomicsClient nomicsClient;
     private final NomicsConfig config;
 
     @GetMapping("/currencies")

@@ -1,7 +1,9 @@
 package com.cryptoGame.domain;
 
 import lombok.AllArgsConstructor;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
@@ -9,6 +11,8 @@ import java.time.LocalDate;
 
 @Entity
 @Table(name = "transactions")
+@Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 public class Transaction {
@@ -19,7 +23,7 @@ public class Transaction {
     private Long id;
 
     @Column(name = "transaction_date", nullable = false)
-    private LocalDate transactionDate;
+    private LocalDate transactionDate = LocalDate.now();
 
     @Column(name = "crypto_name", nullable = false)
     private String cryptoName;
