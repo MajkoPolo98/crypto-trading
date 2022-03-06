@@ -1,33 +1,58 @@
 package com.cryptoGame.controller;
 
+import com.cryptoGame.domain.Coin;
 import com.cryptoGame.domain.Transaction;
+import com.cryptoGame.domain.dtos.CoinDto;
+import com.cryptoGame.domain.dtos.TransactionDto;
+import com.cryptoGame.exceptions.CoinNotFoundException;
+import com.cryptoGame.exceptions.NotEnoughFundsException;
+import com.cryptoGame.exceptions.UserNotFoundException;
+import com.cryptoGame.externalApis.cryptoStock.CryptoStockClient;
+import com.cryptoGame.externalApis.cryptoStock.nomics.NomicsClient;
+import com.cryptoGame.mapper.TransactionMapper;
+import com.cryptoGame.service.TransactionService;
+import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
-@RestController("/v1")
+@RestController
+@CrossOrigin("*")
+@RequiredArgsConstructor
+@RequestMapping("/v1")
 public class TransactionController {
 
+    private final TransactionService service;
+    private final TransactionMapper mapper;
+    private final NomicsClient client;
 
-
-    @PutMapping("/transactions/buy")
-    private void buyCrypto(){
+    @PostMapping("/transactions/buy")
+    private TransactionDto buyCrypto(@RequestBody final TransactionDto dto) throws UserNotFoundException, NotEnoughFundsException {
+        return mapper.mapToTransactionDto(service.buyCrypto(mapper.mapToTransaction(dto)));
 
     }
 
-    private void sellCrypto(){
-
+    @PostMapping("/transactions/sell")
+    private TransactionDto sellCrypto(@RequestBody final TransactionDto dto) throws UserNotFoundException, NotEnoughFundsException{
+        return mapper.mapToTransactionDto(service.sellCrypto(mapper.mapToTransaction(dto)));
     }
 
     @GetMapping("/transactions")
-    private ResponseEntity<List<Transaction>> getAllTransactions(){
-        return new ResponseEntity(new ArrayList<Transaction>(), HttpStatus.OK);
+    private List<TransactionDto> getAllTransactions(){
+        List<Transaction> transactions = service.getAllTransactions();
+        List<String> cryptoSymbols = transactions.stream().map(transaction -> transaction.getCryptoSymbol()).collect(Collectors.toList());
+        List<CoinDto> coinDtos =  client.getCoins(String.join(",", cryptoSymbols));
+        transactions.stream().forEach(transaction -> transaction
+                .setWorthNow(coinDtos.stream()
+                        .filter(coinDto -> coinDto.getSymbol() == transaction.getCryptoSymbol())
+                        .findFirst().get().getPrice()));
+        transactions.forEach(transaction -> service.saveTransaction(transaction));
+        return mapper.mapToTransactionDtoList(transactions);
     }
 
     @GetMapping("/transactions/{id}")

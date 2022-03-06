@@ -4,6 +4,7 @@ import com.cryptoGame.domain.User;
 import com.cryptoGame.domain.dtos.UserDto;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -18,7 +19,7 @@ public class UserMapper {
                 dto.getEmail(),
                 dto.getEmail(),
                 dto.isAdminStatus(),
-                dto.getMoney(),
+                new BigDecimal(dto.getMoney()),
                 dto.getCrypto());
     }
 
@@ -28,7 +29,7 @@ public class UserMapper {
                 user.getEmail(),
                 user.getPassword(),
                 user.isAdminStatus(),
-                user.getMoney(),
+                String.valueOf(user.getMoney()),
                 user.getCrypto());
     }
 

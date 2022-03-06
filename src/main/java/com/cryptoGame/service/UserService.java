@@ -18,46 +18,10 @@ import java.util.List;
 public class UserService {
 
     @Autowired
-    CryptoStockClient cryptoStockClient;
+    private CryptoStockClient cryptoStockClient;
 
     @Autowired
     private UserRepository repository;
-
-    public void buyCrypto (Long userId, String symbol, BigDecimal amountPLN) throws
-            UserNotFoundException, CoinNotFoundException, NotEnoughFundsException {
-        User user = repository.findById(userId).orElseThrow(UserNotFoundException::new);
-        BigDecimal cryptoOwned = user.getCrypto().get(symbol);
-        if(amountPLN.compareTo(user.getMoney())==1){ throw new NotEnoughFundsException();}
-        try {
-            BigDecimal price = cryptoStockClient.getCoins(symbol).get(0).getPrice();
-            BigDecimal cryptoToAdd = amountPLN.divide(price, 6);
-            if(cryptoOwned != null){
-                cryptoOwned.add(cryptoToAdd);
-            } else {
-                user.getCrypto().put(symbol, cryptoToAdd);
-            }
-        } catch (IndexOutOfBoundsException e) {
-            throw new CoinNotFoundException();
-        }
-        user.getMoney().subtract(amountPLN);
-    }
-
-    public void sellCrypto(Long userId, String symbol, BigDecimal amountCrypto) throws
-            UserNotFoundException, CoinNotFoundException, NotEnoughFundsException {
-        User user = findUser(userId);
-        BigDecimal cryptoOwned = user.getCrypto().get(symbol);
-        if(amountCrypto.compareTo(cryptoOwned)==1){ throw new NotEnoughFundsException();}
-        try {
-            BigDecimal price = cryptoStockClient.getCoins(symbol).get(0).getPrice();
-            BigDecimal moneyToAdd = amountCrypto.multiply(price);
-            user.getMoney().add(moneyToAdd);
-            cryptoOwned.subtract(amountCrypto);
-
-        } catch (IndexOutOfBoundsException e) {
-            throw new CoinNotFoundException();
-        }
-        saveUser(user);
-    }
 
     public User saveUser(User user){
         return repository.save(user);

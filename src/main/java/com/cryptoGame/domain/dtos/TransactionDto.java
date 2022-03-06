@@ -17,6 +17,9 @@ public class TransactionDto {
     @JsonProperty("id")
     private Long id;
 
+    @JsonProperty("user_id")
+    private Long user_id;
+
     @JsonProperty("transaction_date")
     private LocalDate transactionDate;
 
@@ -24,12 +27,12 @@ public class TransactionDto {
     private String cryptoSymbol;
 
     @JsonProperty("amount")
-    private BigDecimal cryptoAmount;
+    private String cryptoAmount;
 
-    @JsonProperty("bought_for")
-    private BigDecimal boughtFor;
+    @JsonProperty("money")
+    private String money;
 
     @JsonProperty("worth_now")
-    private BigDecimal worthNow;
+    private String worthNow;
 
 }

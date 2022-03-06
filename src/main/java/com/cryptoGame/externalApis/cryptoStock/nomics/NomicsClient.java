@@ -28,7 +28,7 @@ public class NomicsClient implements CryptoStockClient {
     @Override
     public List<CoinDto> getCoins(String... coinSymbols) {
         URI url = UriComponentsBuilder.fromHttpUrl(
-                        config.getNomicsApi() + "/currencies/ticker?convert=EUR")
+                        config.getNomicsApi() + "/currencies/ticker?convert=EUR&per-page=100&page=1")
                 .queryParam("key", config.getNomicsKey())
                 .queryParam("ids", String.join(",", coinSymbols))
                 .build().encode().toUri();

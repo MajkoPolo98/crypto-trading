@@ -45,4 +45,8 @@ public class User {
     @MapKeyColumn(name = "cryptocurrency")
     @Column(name = "amount")
     private Map<String, BigDecimal> crypto;
+
+    public void addCrypto(String symbol, BigDecimal value){
+        crypto.put(symbol, crypto.get(symbol).add(value));
+    }
 }

@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.math.BigDecimal;
 import java.util.Map;
@@ -11,6 +12,7 @@ import java.util.Map;
 @Data
 @JsonIgnoreProperties(ignoreUnknown = true)
 @AllArgsConstructor
+@NoArgsConstructor
 public class UserDto {
 
     @JsonProperty("id")
@@ -29,8 +31,16 @@ public class UserDto {
     private boolean adminStatus;
 
     @JsonProperty("money_PLN")
-    private BigDecimal money;
+    private String money;
 
     @JsonProperty("wallet")
     private Map<String, BigDecimal> crypto;
+
+    public UserDto(String userName, String email, String password, boolean adminStatus, String money) {
+        this.userName = userName;
+        this.email = email;
+        this.password = password;
+        this.adminStatus = adminStatus;
+        this.money = money;
+    }
 }
