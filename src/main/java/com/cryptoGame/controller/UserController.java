@@ -10,6 +10,7 @@ import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
 import java.math.BigDecimal;
+import java.util.List;
 
 @RestController
 @CrossOrigin("*")
@@ -37,12 +38,22 @@ public class UserController {
         service.removeUser(userId);
     }
 
-    @PutMapping(value = "/user/{userId}/{moneyAmount}", consumes = MediaType.APPLICATION_JSON_VALUE)
+    @PutMapping(value = "/user/{userId}/{moneyAmount}")
     private UserDto addMoney(@PathVariable("userId") Long userId, @PathVariable("moneyAmount") BigDecimal moneyAmount) throws UserNotFoundException{
         User user = service.findUser(userId);
-        user.getMoney().add(moneyAmount);
+        user.setMoney(user.getMoney().add(moneyAmount));
         User savedUser = service.saveUser(user);
         return mapper.mapToUserDto(savedUser);
+    }
+
+    @GetMapping(value = "/user")
+    private List<UserDto> getAllUsers(){
+        return mapper.mapToUserDtoList(service.getAllUsers());
+    }
+
+    @GetMapping(value = "/user/{userId}")
+    private UserDto getUser(@PathVariable("userId") Long userId) throws UserNotFoundException{
+        return mapper.mapToUserDto(service.findUser(userId));
     }
 
 }

@@ -1,7 +1,7 @@
 package com.cryptoGame.mapper;
 
-import com.cryptoGame.domain.Transaction;
-import com.cryptoGame.domain.dtos.TransactionDto;
+import com.cryptoGame.domain.UserTransaction;
+import com.cryptoGame.domain.dtos.UserTransactionDto;
 import com.cryptoGame.exceptions.UserNotFoundException;
 import com.cryptoGame.externalApis.cryptoStock.CryptoStockClient;
 import com.cryptoGame.repository.UserRepository;
@@ -13,15 +13,15 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
-public class TransactionMapper {
+public class UserTransactionMapper {
 
     @Autowired
     private CryptoStockClient client;
     @Autowired
     private UserRepository userRepository;
 
-    public Transaction mapToTransaction(TransactionDto dto) throws UserNotFoundException{
-        Transaction transaction = new Transaction();
+    public UserTransaction mapToTransaction(UserTransactionDto dto) throws UserNotFoundException{
+        UserTransaction transaction = new UserTransaction();
         transaction.setId(dto.getId());
         transaction.setUser(userRepository.findById(dto.getUser_id()).orElseThrow(UserNotFoundException::new));
         transaction.setTransactionDate(dto.getTransactionDate());
@@ -36,9 +36,9 @@ public class TransactionMapper {
 
     }
 
-    public TransactionDto mapToTransactionDto(Transaction transaction){
+    public UserTransactionDto mapToTransactionDto(UserTransaction transaction){
         System.out.println(transaction.getCryptoSymbol());
-        return new TransactionDto(transaction.getId(),
+        return new UserTransactionDto(transaction.getId(),
                 transaction.getUser().getId(),
                 transaction.getTransactionDate(),
                 transaction.getCryptoSymbol(),
@@ -47,7 +47,7 @@ public class TransactionMapper {
                 String.valueOf(transaction.getWorthNow()));
     }
 
-    public List<TransactionDto> mapToTransactionDtoList(final List<Transaction> transactions){
+    public List<UserTransactionDto> mapToTransactionDtoList(final List<UserTransaction> transactions){
         return transactions.stream().map(this::mapToTransactionDto).collect(Collectors.toList());
     }
 }

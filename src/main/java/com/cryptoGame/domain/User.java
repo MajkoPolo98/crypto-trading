@@ -37,6 +37,10 @@ public class User {
     @Column(name = "money")
     private BigDecimal money;
 
+    @ManyToOne
+    @JoinColumn(name = "organisation_name")
+    private Organisation organisation;
+
     @ElementCollection
     @CollectionTable(
             name = "crypto_wallet",
@@ -49,4 +53,6 @@ public class User {
     public void addCrypto(String symbol, BigDecimal value){
         crypto.put(symbol, crypto.get(symbol).add(value));
     }
+
+
 }

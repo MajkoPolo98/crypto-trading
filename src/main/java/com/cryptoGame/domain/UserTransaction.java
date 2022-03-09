@@ -10,12 +10,12 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 
 @Entity
-@Table(name = "transactions")
+@Table(name = "user_transactions")
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class Transaction {
+public class UserTransaction {
 
     @Id
     @GeneratedValue
@@ -38,11 +38,9 @@ public class Transaction {
     @Column(name = "money")
     private BigDecimal money;
 
-
     @Column(name = "worth_now")
     private BigDecimal worthNow;
-
-    public Transaction(User user, LocalDate transactionDate, String cryptoSymbol, BigDecimal cryptoAmount, BigDecimal money) {
+    public UserTransaction(User user, LocalDate transactionDate, String cryptoSymbol, BigDecimal cryptoAmount, BigDecimal money) {
         this.user = user;
         this.transactionDate = transactionDate;
         this.cryptoSymbol = cryptoSymbol;

@@ -4,7 +4,6 @@ import com.cryptoGame.domain.dtos.CoinDto;
 import com.cryptoGame.externalApis.cryptoStock.nomics.NomicsClient;
 import com.cryptoGame.externalApis.cryptoStock.nomics.NomicsConfig;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -19,10 +18,13 @@ public class StockController {
     private final NomicsConfig config;
 
     @GetMapping("/stock")
-    public void getCurrencies(){
-        List<CoinDto> coinsList = nomicsClient.getCoins(config.getNomicsMainCurrencies());
+    public List<CoinDto> getCurrencies(){
+        return nomicsClient.getCoins(config.getNomicsMainCurrencies());
+    }
 
-        coinsList.forEach(coinDto -> System.out.println(coinDto.getSymbol()+ " " + coinDto.getPrice()));
+    @GetMapping("/stock/{symbol}")
+    public List<CoinDto> getCurrency(@PathVariable("symbol") String symbols){
+        return nomicsClient.getCoins(symbols);
     }
 
 }

@@ -12,7 +12,7 @@ import java.time.LocalDate;
 @Data
 @JsonIgnoreProperties(ignoreUnknown = true)
 @AllArgsConstructor
-public class TransactionDto {
+public class UserTransactionDto {
 
     @JsonProperty("id")
     private Long id;
