@@ -22,7 +22,7 @@ public class UserMapper {
                 dto.getEmail(),
                 dto.getPassword(),
                 dto.isAdminStatus(),
-                new BigDecimal(dto.getMoney()),
+                dto.getMoney(),
                 orgRepository.findByGroupName(dto.getGroup_name()).orElse(null),
                 dto.getCrypto());
     }
@@ -33,7 +33,7 @@ public class UserMapper {
                 user.getEmail(),
                 user.getPassword(),
                 user.isAdminStatus(),
-                String.valueOf(user.getMoney()),
+                user.getMoney(),
                 null,
                 user.getCrypto());
         if(user.getOrganisation() != null){

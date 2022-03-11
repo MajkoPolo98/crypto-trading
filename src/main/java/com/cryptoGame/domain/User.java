@@ -1,5 +1,6 @@
 package com.cryptoGame.domain;
 
+import com.cryptoGame.exceptions.NotEnoughFundsException;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -18,7 +19,7 @@ import java.util.Map;
 public class User {
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name="user_id", nullable = false)
     private Long id;
 
@@ -54,5 +55,12 @@ public class User {
         crypto.put(symbol, crypto.get(symbol).add(value));
     }
 
+    public void sendMoneyToOrganisation(BigDecimal amount) throws NotEnoughFundsException{
+        if(amount.compareTo(money) == 1){
+            throw new NotEnoughFundsException();
+        }
+        money = money.subtract(amount);
+        organisation.setMoney(organisation.getMoney().add(amount));
+    }
 
 }

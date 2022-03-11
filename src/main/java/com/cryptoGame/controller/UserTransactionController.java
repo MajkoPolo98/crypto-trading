@@ -25,18 +25,17 @@ public class UserTransactionController {
     private final UserTransactionMapper mapper;
     private final NomicsClient client;
 
-    @PostMapping("/transactions/buy")
+    @PostMapping("/user/transactions/buy")
     private UserTransactionDto buyCrypto(@RequestBody final UserTransactionDto dto) throws UserNotFoundException, NotEnoughFundsException {
         return mapper.mapToTransactionDto(service.buyCrypto(mapper.mapToTransaction(dto)));
-
     }
 
-    @PostMapping("/transactions/sell")
+    @PostMapping("/user/transactions/sell")
     private UserTransactionDto sellCrypto(@RequestBody final UserTransactionDto dto) throws UserNotFoundException, NotEnoughFundsException{
         return mapper.mapToTransactionDto(service.sellCrypto(mapper.mapToTransaction(dto)));
     }
 
-    @GetMapping("/transactions")
+    @GetMapping("/user/transactions")
     private List<UserTransactionDto> getAllTransactions(){
         List<UserTransaction> transactions = service.getAllTransactions();
         List<String> cryptoSymbols = transactions.stream().map(transaction -> transaction.getCryptoSymbol()).collect(Collectors.toList());
@@ -49,12 +48,12 @@ public class UserTransactionController {
         return mapper.mapToTransactionDtoList(transactions);
     }
 
-    @GetMapping("/transactions/{id}")
+    @GetMapping("/user/transactions/{id}")
     private UserTransactionDto getTransaction(@PathVariable("id") Long id) throws TransactionNotFoundException {
         return mapper.mapToTransactionDto(service.findTransaction(id));
     }
 
-    @DeleteMapping(value = "/transactions/{id}")
+    @DeleteMapping(value = "/user/transactions/{id}")
     private void removeTransaction(@PathVariable("id") Long id) throws TransactionNotFoundException {
         service.removeTransaction(id);
     }

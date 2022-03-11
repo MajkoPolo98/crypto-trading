@@ -20,7 +20,7 @@ import java.util.Map;
 public class Organisation {
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name="organisation_id", unique = true)
     private Long id;
 
@@ -28,10 +28,7 @@ public class Organisation {
     private String groupName;
 
     @Column(name = "organisation_funds")
-    private BigDecimal groupFunds;
-
-    @Column(name = "currency")
-    private String currency;
+    private BigDecimal money;
 
     @ElementCollection
     @CollectionTable(
@@ -49,4 +46,17 @@ public class Organisation {
             fetch = FetchType.LAZY
     )
     private List<User> users;
+
+    public void addCrypto(String symbol, BigDecimal value){
+        crypto.put(symbol, crypto.get(symbol).add(value));
+    }
+
+    public Organisation(String groupName, BigDecimal money) {
+        this.groupName = groupName;
+        this.money = money;
+    }
+
+    public void addUserToOrganisation(User user){
+        users.add(user);
+    }
 }

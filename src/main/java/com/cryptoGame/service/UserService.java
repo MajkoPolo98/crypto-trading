@@ -39,4 +39,8 @@ public class UserService {
         return repository.findAll();
     }
 
+    public void sendMoneyToOrganisation(Long userId, BigDecimal amount) throws UserNotFoundException, NotEnoughFundsException{
+        findUser(userId).sendMoneyToOrganisation(amount);
+    }
+
 }

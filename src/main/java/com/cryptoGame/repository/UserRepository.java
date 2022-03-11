@@ -1,6 +1,7 @@
 package com.cryptoGame.repository;
 
 import com.cryptoGame.domain.User;
+import com.cryptoGame.exceptions.UserNotFoundException;
 import org.springframework.data.repository.CrudRepository;
 
 import java.util.List;

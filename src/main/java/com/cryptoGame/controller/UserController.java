@@ -1,9 +1,15 @@
 package com.cryptoGame.controller;
 
+import com.cryptoGame.domain.Organisation;
 import com.cryptoGame.domain.User;
+import com.cryptoGame.domain.dtos.OrganisationDto;
 import com.cryptoGame.domain.dtos.UserDto;
+import com.cryptoGame.exceptions.NotEnoughFundsException;
+import com.cryptoGame.exceptions.OrganisationNotFoundException;
 import com.cryptoGame.exceptions.UserNotFoundException;
+import com.cryptoGame.mapper.OrganisationMapper;
 import com.cryptoGame.mapper.UserMapper;
+import com.cryptoGame.service.OrganisationService;
 import com.cryptoGame.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
@@ -11,6 +17,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.math.BigDecimal;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @CrossOrigin("*")
@@ -20,6 +27,8 @@ public class UserController {
 
     private final UserMapper mapper;
     private final UserService service;
+    private final OrganisationService organisationService;
+    private final OrganisationMapper organisationMapper;
 
     @PostMapping(value = "/user", consumes = MediaType.APPLICATION_JSON_VALUE)
     private void addUser(@RequestBody final UserDto userDto){
@@ -56,4 +65,22 @@ public class UserController {
         return mapper.mapToUserDto(service.findUser(userId));
     }
 
+    @PutMapping(value = "/user/organisation", consumes = MediaType.APPLICATION_JSON_VALUE)
+    private OrganisationDto giveMoneyToOrganisation(@RequestBody Map<String, BigDecimal> json) throws NotEnoughFundsException, UserNotFoundException {
+        Long userId = json.get("user_id").longValue();
+        BigDecimal amount = json.get("amount");
+        service.sendMoneyToOrganisation(userId, amount);
+        service.saveUser(service.findUser(userId));
+        return organisationMapper.mapToOrganisationDto(organisationService.saveOrganisation(service.findUser(userId).getOrganisation()));
+    }
+
+    @PutMapping(value = "/user/{userId}/organisation/{organisationId}")
+    private OrganisationDto joinOrganisation(@PathVariable("organisationId") Long organisationId, @PathVariable("userId") Long userId) throws
+            UserNotFoundException, OrganisationNotFoundException {
+        User user = service.findUser(userId);
+        Organisation organisation = organisationService.findOrganisation(organisationId);
+        user.setOrganisation(organisation);
+        service.saveUser(user);
+        return organisationMapper.mapToOrganisationDto(organisationService.saveOrganisation(organisation));
+    }
 }

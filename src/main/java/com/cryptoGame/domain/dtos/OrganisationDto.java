@@ -7,36 +7,29 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.math.BigDecimal;
+import java.util.List;
 import java.util.Map;
+
 
 @Data
 @JsonIgnoreProperties(ignoreUnknown = true)
 @AllArgsConstructor
 @NoArgsConstructor
-public class UserDto {
+public class OrganisationDto {
 
     @JsonProperty("id")
     private Long id;
 
-    @JsonProperty("name")
-    private String userName;
+    @JsonProperty("organisation_name")
+    private String groupName;
 
-    @JsonProperty("email")
-    private String email;
+    @JsonProperty("organisation_funds")
+    private BigDecimal groupFunds;
 
-    @JsonProperty("password")
-    private String password;
-
-    @JsonProperty("admin")
-    private boolean adminStatus;
-
-    @JsonProperty("money_PLN")
-    private BigDecimal money;
-
-    @JsonProperty("group_name")
-    private String group_name;
-
-    @JsonProperty("wallet")
+    @JsonProperty("organisation_wallet")
     private Map<String, BigDecimal> crypto;
+
+    @JsonProperty("users")
+    private List<Long> users;
 
 }

@@ -18,7 +18,7 @@ import java.time.LocalDate;
 public class UserTransaction {
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "transaction_id", nullable = false)
     private Long id;
 
