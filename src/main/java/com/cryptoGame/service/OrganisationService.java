@@ -30,6 +30,10 @@ public class OrganisationService {
         return repository.findById(id).orElseThrow(OrganisationNotFoundException::new);
     }
 
+    public Organisation findOrganisationByName(String name) throws OrganisationNotFoundException {
+        return repository.findByGroupName(name).orElseThrow(OrganisationNotFoundException::new);
+    }
+
     public void removeOrganisation(Long id) {
         repository.deleteById(id);
     }

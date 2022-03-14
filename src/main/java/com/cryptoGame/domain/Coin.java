@@ -18,6 +18,6 @@ public class Coin {
 
     private BigDecimal price;
 
-    private transient String logoUrl;
+    private String logoUrl;
 
 }

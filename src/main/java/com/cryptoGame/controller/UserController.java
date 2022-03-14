@@ -60,6 +60,11 @@ public class UserController {
         return mapper.mapToUserDtoList(service.getAllUsers());
     }
 
+    @GetMapping(value = "/user/find/{name}")
+    private UserDto getUserByName(@PathVariable("name") String name) throws UserNotFoundException{
+        return mapper.mapToUserDto(service.findUserByName(name));
+    }
+
     @GetMapping(value = "/user/{userId}")
     private UserDto getUser(@PathVariable("userId") Long userId) throws UserNotFoundException{
         return mapper.mapToUserDto(service.findUser(userId));

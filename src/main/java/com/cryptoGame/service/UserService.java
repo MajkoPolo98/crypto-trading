@@ -24,11 +24,19 @@ public class UserService {
     private UserRepository repository;
 
     public User saveUser(User user){
+        System.out.println("NAME: " +user.getUserName());
+        System.out.println("CRYPTO: " +user.getMoney());
+        System.out.println("EMAIL: " + user.getEmail());
+        System.out.println(user.getId());
         return repository.save(user);
     }
 
     public User findUser(Long id) throws UserNotFoundException{
         return repository.findById(id).orElseThrow(UserNotFoundException::new);
+    }
+
+    public User findUserByName(String name) throws UserNotFoundException{
+        return repository.findByUserName(name).orElseThrow(UserNotFoundException::new);
     }
 
     public void removeUser(Long id) {

@@ -24,7 +24,7 @@ public class Organisation {
     @Column(name="organisation_id", unique = true)
     private Long id;
 
-    @Column(name = "organisation_name", nullable = false)
+    @Column(name = "organisation_name", nullable = false, unique = true)
     private String groupName;
 
     @Column(name = "organisation_funds")

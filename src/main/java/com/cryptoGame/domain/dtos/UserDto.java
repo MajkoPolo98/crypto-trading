@@ -30,7 +30,7 @@ public class UserDto {
     @JsonProperty("admin")
     private boolean adminStatus;
 
-    @JsonProperty("money_PLN")
+    @JsonProperty("money")
     private BigDecimal money;
 
     @JsonProperty("group_name")

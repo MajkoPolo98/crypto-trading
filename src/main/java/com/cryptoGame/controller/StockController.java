@@ -23,8 +23,8 @@ public class StockController {
     }
 
     @GetMapping("/stock/{symbol}")
-    public List<CoinDto> getCurrency(@PathVariable("symbol") String symbols){
-        return nomicsClient.getCoins(symbols);
+    public CoinDto getCurrency(@PathVariable("symbol") String symbols){
+        return nomicsClient.getCoins(symbols).get(0);
     }
 
 }

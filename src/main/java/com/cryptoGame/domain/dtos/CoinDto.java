@@ -21,6 +21,6 @@ public class CoinDto {
     @JsonProperty("price")
     private BigDecimal price;
 
-    @JsonProperty("logoUrl")
-    private transient String logoUrl;
+    @JsonProperty("logo_url")
+    private String logoUrl;
 }
