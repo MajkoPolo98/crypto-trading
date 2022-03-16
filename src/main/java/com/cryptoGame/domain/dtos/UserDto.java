@@ -7,6 +7,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.math.BigDecimal;
+import java.util.List;
 import java.util.Map;
 
 @Data
@@ -33,10 +34,14 @@ public class UserDto {
     @JsonProperty("money")
     private BigDecimal money;
 
+    @JsonProperty("value")
+    private BigDecimal value;
+
     @JsonProperty("group_name")
     private String group_name;
 
     @JsonProperty("wallet")
+    //private List<WalletDto> crypto;
     private Map<String, BigDecimal> crypto;
 
 }

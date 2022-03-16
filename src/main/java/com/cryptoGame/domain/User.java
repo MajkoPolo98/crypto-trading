@@ -38,8 +38,11 @@ public class User {
     @Column(name = "money")
     private BigDecimal money;
 
+    @Column(name = "user_value")
+    private BigDecimal value;
+
     @ManyToOne
-    @JoinColumn(name = "organisation_name")
+    @JoinColumn(name = "organisation_id")
     private Organisation organisation;
 
     @ElementCollection
@@ -62,5 +65,6 @@ public class User {
         money = money.subtract(amount);
         organisation.setMoney(organisation.getMoney().add(amount));
     }
+
 
 }

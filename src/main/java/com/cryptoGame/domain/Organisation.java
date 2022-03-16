@@ -51,9 +51,11 @@ public class Organisation {
         crypto.put(symbol, crypto.get(symbol).add(value));
     }
 
-    public Organisation(String groupName, BigDecimal money) {
+    public Organisation(Long id, String groupName, BigDecimal money, Map<String, BigDecimal> crypto) {
+        this.id = id;
         this.groupName = groupName;
         this.money = money;
+        this.crypto = crypto;
     }
 
     public void addUserToOrganisation(User user){
