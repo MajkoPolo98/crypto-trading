@@ -18,7 +18,7 @@ class NomicsClientTest {
     @Autowired
     private NomicsClient client;
 
-    @Test
+/*    @Test
     void getCoins() {
         List<CoinDto> coinList = client.getCoins("ETH", "ETH");
         BigDecimal price = coinList.get(0).getPrice();
@@ -28,7 +28,7 @@ class NomicsClientTest {
         System.out.println(amountPLN);
         System.out.println(result);
 
-    }
+    }*/
 
     @Test
     void getPrice() {

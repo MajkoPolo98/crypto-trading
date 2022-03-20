@@ -2,10 +2,12 @@ package com.cryptoGame.mapper;
 
 import com.cryptoGame.domain.Coin;
 import com.cryptoGame.domain.dtos.CoinDto;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
+@Service
 public class CoinMapper {
 
     public Coin mapToCoin(CoinDto dto){
@@ -19,7 +21,7 @@ public class CoinMapper {
         return new CoinDto(coin.getSymbol(),
                 coin.getName(),
                 coin.getPrice(),
-                coin.getLogoUrl());
+                coin.getLogo_url());
     }
 
     public List<CoinDto> mapToCoinDtoList(List<Coin> coins){

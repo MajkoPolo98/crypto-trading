@@ -23,11 +23,11 @@ public class OrganisationTransaction {
     private Long id;
 
     @OneToOne
-    @JoinColumn(name = "user_id")
+    @JoinColumn(name = "user_id", unique = true)
     private User user;
 
     @OneToOne
-    @JoinColumn(name = "organisation_name", referencedColumnName = "organisation_name")
+    @JoinColumn(name = "organisation_name", referencedColumnName = "organisation_name", unique = true)
     private Organisation organisation;
 
     @Column(name = "transaction_date")
@@ -36,7 +36,7 @@ public class OrganisationTransaction {
     @Column(name = "crypto_symbol", nullable = false)
     private String cryptoSymbol;
 
-    @Column(name = "crypto_amount")
+    @Column(name = "crypto_amount", precision = 8, scale = 8)
     private BigDecimal cryptoAmount;
 
     @Column(name = "money")

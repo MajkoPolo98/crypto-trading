@@ -26,7 +26,7 @@ public class UserTransactionDto {
     @JsonProperty("crypto_symbol")
     private String cryptoSymbol;
 
-    @JsonProperty("amount")
+    @JsonProperty("crypto_amount")
     private String cryptoAmount;
 
     @JsonProperty("money")

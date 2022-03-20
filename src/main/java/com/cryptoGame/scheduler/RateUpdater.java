@@ -1,15 +1,14 @@
 package com.cryptoGame.scheduler;
 
-import com.cryptoGame.domain.Coin;
-import com.cryptoGame.domain.User;
-import com.cryptoGame.domain.UserTransaction;
+import com.cryptoGame.controller.StockController;
+import com.cryptoGame.domain.*;
 import com.cryptoGame.domain.dtos.CoinDto;
 import com.cryptoGame.externalApis.cryptoStock.CryptoStockClient;
 import com.cryptoGame.mapper.CoinMapper;
-import com.cryptoGame.repository.CoinRepository;
-import com.cryptoGame.repository.UserRepository;
-import com.cryptoGame.repository.UserTransactionRepository;
+import com.cryptoGame.repository.*;
+import lombok.Getter;
 import lombok.RequiredArgsConstructor;
+import lombok.Setter;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
@@ -18,35 +17,43 @@ import java.math.BigDecimal;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @Component
 @RequiredArgsConstructor
+@Setter
+@Getter
 @Transactional
 public class RateUpdater {
 
-    private final CryptoStockClient client;
+    private final StockController stock;
     private final UserRepository userRepository;
-    private final UserTransactionRepository transactionRepository;
+    private final CoinRepository coinRepository;
+    private final CoinMapper coinMapper;
+    private final UserTransactionRepository userTransactionRepository;
+    private final OrganisationTransactionRepository organisationTransactionRepository;
     private List<CoinDto> coins;
     private final String cron = "*/20 * * * * *";
 
     @Scheduled(cron = cron)
     public void updateRates() {
-        String symbols = String.join(",", transactionRepository.findAll().stream().map(UserTransaction::getCryptoSymbol).collect(Collectors.toSet()));
-        this.coins = client.getCoins(symbols);
+        List<String> usedSymbols = stock.getAllUsedCoins().stream().map(CoinDto::getSymbol).collect(Collectors.toList());
+        this.coins = stock.getSelectedCurrencies(usedSymbols);
+        coins.forEach(coinDto -> coinRepository.save(coinMapper.mapToCoin(coinDto)));
+        updateOrganisationTransactions();
+        updateUserTransactions();
+        updateUserValue();
     }
 
-    @Scheduled(cron = cron)
-    public void updateTransactions(){
-        coins.forEach(coin -> transactionRepository.findAllByCryptoSymbol(coin.getSymbol())
+    public void updateUserTransactions(){
+        coins.forEach(coin -> userTransactionRepository.findAllByCryptoSymbol(coin.getSymbol())
                 .forEach(transaction -> {
-                    transaction.setWorthNow(transaction.getCryptoAmount().multiply(coin.getPrice()).negate());
-                    transactionRepository.save(transaction);
+                    transaction.setWorthNow(transaction.getCryptoAmount().multiply(coin.getPrice()));
+                    userTransactionRepository.save(transaction);
                 }));
     }
 
-    @Scheduled(cron = cron)
     public void updateUserValue(){
         List<User> users = userRepository.findAll();
 
@@ -63,4 +70,30 @@ public class RateUpdater {
             userRepository.save(user);
         }
     }
+
+    public void updateOrganisationTransactions(){
+        coins.forEach(coin -> organisationTransactionRepository.findAllByCryptoSymbol(coin.getSymbol())
+                .forEach(transaction -> {
+                    transaction.setWorthNow(transaction.getCryptoAmount().multiply(coin.getPrice()));
+                    organisationTransactionRepository.save(transaction);
+                }));
+    }
+
+/*    @Scheduled(cron = cron)
+    public void updateOrganisationValue(){
+        List<Organisation> organisations = organisationRepository.findAll();
+
+        Map<String, CoinDto> coinMap = new HashMap<>();
+        for(CoinDto coin: coins){
+            coinMap.put(coin.getSymbol(), coin);
+        }
+        for(Organisation organisation: organisations){
+            BigDecimal value = organisation.getMoney();
+            for(Map.Entry<String, BigDecimal> entry: organisation.getCrypto().entrySet()){
+                value = value.add(coinMap.get(entry.getKey()).getPrice().multiply(entry.getValue()));
+            }
+            organisation.setValue(value);
+            userRepository.save(user);
+        }
+    }*/
 }

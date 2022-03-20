@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.Map;
@@ -17,7 +18,7 @@ import java.util.Map;
 @Table(name = "organisations")
 @NoArgsConstructor
 @AllArgsConstructor
-public class Organisation {
+public class Organisation implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -36,7 +37,7 @@ public class Organisation {
             joinColumns = {@JoinColumn(name = "organisation_id")}
     )
     @MapKeyColumn(name = "cryptocurrency")
-    @Column(name = "amount")
+    @Column(name = "amount", precision = 8, scale = 8)
     private Map<String, BigDecimal> crypto;
 
     @OneToMany(

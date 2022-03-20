@@ -2,16 +2,13 @@ package com.cryptoGame.mapper;
 
 import com.cryptoGame.domain.User;
 import com.cryptoGame.domain.dtos.UserDto;
-import com.cryptoGame.domain.dtos.WalletDto;
+
 import com.cryptoGame.repository.OrganisationRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.HashMap;
+
 import java.util.List;
-import java.util.Map;
 import java.util.stream.Collectors;
 
 @Service
@@ -21,10 +18,7 @@ public class UserMapper {
     private OrganisationRepository orgRepository;
 
     public User mapToUser(UserDto dto){
-/*        Map<String, BigDecimal> crypto = new HashMap<>();
-        dto.getCrypto().forEach(walletDto -> {
-            crypto.put(walletDto.getSymbol(), walletDto.getAmount());
-        });*/
+
         return new User(dto.getId(),
                 dto.getUserName(),
                 dto.getEmail(),

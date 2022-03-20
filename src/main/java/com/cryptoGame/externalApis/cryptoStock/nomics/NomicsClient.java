@@ -1,5 +1,6 @@
 package com.cryptoGame.externalApis.cryptoStock.nomics;
 
+import com.cryptoGame.domain.Coin;
 import com.cryptoGame.domain.dtos.CoinDto;
 import com.cryptoGame.externalApis.cryptoStock.CryptoStockClient;
 
@@ -28,7 +29,7 @@ public class NomicsClient implements CryptoStockClient {
     private static final Logger LOGGER = LoggerFactory.getLogger(NomicsClient.class);
 
     @Override
-    public List<CoinDto> getCoins(String... coinSymbols) {
+    public List<Coin> getCoins(String... coinSymbols) {
         URI url = UriComponentsBuilder.fromHttpUrl(
                         config.getNomicsApi() + "/currencies/ticker?per-page=100&page=1")
                 .queryParam("convert", ipApi.getUserLocation().getCurrency())
@@ -37,7 +38,7 @@ public class NomicsClient implements CryptoStockClient {
                 .build().encode().toUri();
 
         try {
-            CoinDto[] response = restTemplate.getForObject(url, CoinDto[].class);
+            Coin[] response = restTemplate.getForObject(url, Coin[].class);
             return Optional.ofNullable(response)
                     .map(Arrays::asList)
                     .orElse(Collections.emptyList())

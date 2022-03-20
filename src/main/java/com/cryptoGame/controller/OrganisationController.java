@@ -57,8 +57,8 @@ public class OrganisationController {
     }
 
     @GetMapping(value = "/organisation/find/{organisationName}")
-    private OrganisationDto getOrganisationByName(@PathVariable("organisationName") Long organisationName) throws OrganisationNotFoundException{
-        return mapper.mapToOrganisationDto(service.findOrganisation(organisationName));
+    private OrganisationDto getOrganisationByName(@PathVariable("organisationName") String organisationName) throws OrganisationNotFoundException{
+        return mapper.mapToOrganisationDto(service.findOrganisationByName(organisationName));
     }
 
 

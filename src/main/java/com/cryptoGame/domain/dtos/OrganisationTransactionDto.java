@@ -28,7 +28,7 @@ public class OrganisationTransactionDto {
     @JsonProperty("crypto_symbol")
     private String cryptoSymbol;
 
-    @JsonProperty("amount")
+    @JsonProperty("crypto_amount")
     private BigDecimal cryptoAmount;
 
     @JsonProperty("money")

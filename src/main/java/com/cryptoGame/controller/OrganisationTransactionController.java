@@ -3,10 +3,13 @@ package com.cryptoGame.controller;
 import com.cryptoGame.domain.OrganisationTransaction;
 import com.cryptoGame.domain.dtos.CoinDto;
 import com.cryptoGame.domain.dtos.OrganisationTransactionDto;
+import com.cryptoGame.exceptions.CoinNotFoundException;
 import com.cryptoGame.exceptions.NotEnoughFundsException;
 import com.cryptoGame.exceptions.TransactionNotFoundException;
 import com.cryptoGame.externalApis.cryptoStock.nomics.NomicsClient;
+import com.cryptoGame.mapper.CoinMapper;
 import com.cryptoGame.mapper.OrganisationTransactionMapper;
+import com.cryptoGame.repository.CoinRepository;
 import com.cryptoGame.service.OrganisationTransactionService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
@@ -24,6 +27,8 @@ public class OrganisationTransactionController {
 
     private final OrganisationTransactionService service;
     private final OrganisationTransactionMapper mapper;
+    private final CoinRepository coinRepository;
+    private final CoinMapper coinMapper;
     private final NomicsClient client;
 
     @PostMapping("/organisation/transactions/buy")
@@ -40,13 +45,27 @@ public class OrganisationTransactionController {
     @GetMapping("/organisation/transactions")
     private List<OrganisationTransactionDto> getAllTransactions(){
         List<OrganisationTransaction> transactions = service.getAllTransactions();
-        List<String> cryptoSymbols = transactions.stream().map(transaction -> transaction.getCryptoSymbol()).collect(Collectors.toList());
-        List<CoinDto> coinDtos =  client.getCoins(String.join(",", cryptoSymbols));
+        List<String> cryptoSymbols = transactions.stream().map(OrganisationTransaction::getCryptoSymbol).collect(Collectors.toList());
+        List<CoinDto> coinDtos =  coinMapper.mapToCoinDtoList(client.getCoins(String.join(",", cryptoSymbols)));
+        transactions.forEach(transaction -> transaction
+                .setWorthNow(coinDtos.stream()
+                        .filter(coinDto -> Objects.equals(coinDto.getSymbol(), transaction.getCryptoSymbol()))
+                        .findFirst().get().getPrice().multiply(transaction.getCryptoAmount())));
+        transactions.forEach(service::saveTransaction);
+        return mapper.mapToTransactionDtoList(transactions);
+    }
+
+    @GetMapping("/organisation/{organisationId}/transactions")
+    private List<OrganisationTransactionDto> getAllOrganisationTransactions(@PathVariable("organisationId") Long organisationId){
+        List<OrganisationTransaction> transactions = service.getAllTransactions().stream()
+                .filter(organisationTransaction -> organisationTransaction.getId().equals(organisationId)).collect(Collectors.toList());
+        List<String> cryptoSymbols = transactions.stream().map(OrganisationTransaction::getCryptoSymbol).collect(Collectors.toList());
+        List<CoinDto> coinDtos =  coinMapper.mapToCoinDtoList(client.getCoins(String.join(",", cryptoSymbols)));
         transactions.forEach(transaction -> transaction
                 .setWorthNow(coinDtos.stream()
                         .filter(coinDto -> Objects.equals(coinDto.getSymbol(), transaction.getCryptoSymbol()))
                         .findFirst().get().getPrice()));
-        transactions.forEach(transaction -> service.saveTransaction(transaction));
+        transactions.forEach(service::saveTransaction);
         return mapper.mapToTransactionDtoList(transactions);
     }
 
@@ -59,4 +78,5 @@ public class OrganisationTransactionController {
     private void removeTransaction(@PathVariable("id") Long id)  {
         service.removeTransaction(id);
     }
+
 }

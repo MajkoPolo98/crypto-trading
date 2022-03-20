@@ -1,10 +1,12 @@
 package com.cryptoGame.service;
 
+import com.cryptoGame.domain.Coin;
 import com.cryptoGame.domain.User;
 import com.cryptoGame.domain.UserTransaction;
 import com.cryptoGame.exceptions.NotEnoughFundsException;
 import com.cryptoGame.exceptions.TransactionNotFoundException;
 import com.cryptoGame.externalApis.cryptoStock.CryptoStockClient;
+import com.cryptoGame.repository.CoinRepository;
 import com.cryptoGame.repository.UserRepository;
 import com.cryptoGame.repository.UserTransactionRepository;
 import lombok.RequiredArgsConstructor;
@@ -21,6 +23,7 @@ public class UserTransactionService {
 
     private final UserTransactionRepository transactionRepository;
     private final UserRepository userRepository;
+    private final CoinRepository coinRepository;
 
     private final CryptoStockClient cryptoStockClient;
 
@@ -32,9 +35,11 @@ public class UserTransactionService {
 
         BigDecimal cryptoOwned = user.getCrypto().get(symbol);
         if(amountPLN.compareTo(user.getMoney())==1){ throw new NotEnoughFundsException();}
-        BigDecimal price = cryptoStockClient.getCoins(symbol).get(0).getPrice();
+        Coin coin = cryptoStockClient.getCoins(symbol).get(0);
+        System.out.println(coin.getSymbol() + "XOXOXOXOX");
+        coinRepository.save(coin);
+        BigDecimal price = coin.getPrice();
         BigDecimal cryptoToAdd = amountPLN.divide(price, 8, RoundingMode.HALF_EVEN);
-        System.out.println(cryptoToAdd);
         if(cryptoOwned != null){
             user.addCrypto(symbol, cryptoToAdd);
         } else {
@@ -45,6 +50,7 @@ public class UserTransactionService {
         UserTransaction transactionToSave = new UserTransaction(transaction.getUser(), LocalDate.now(), symbol, cryptoToAdd, amountPLN.negate());
         userRepository.save(user);
         transactionRepository.save(transactionToSave);
+
 
         return transactionToSave;
 

@@ -1,5 +1,6 @@
 package com.cryptoGame.service;
 
+import com.cryptoGame.domain.Coin;
 import com.cryptoGame.domain.Organisation;
 import com.cryptoGame.domain.OrganisationTransaction;
 import com.cryptoGame.exceptions.NotEnoughFundsException;
@@ -32,7 +33,8 @@ public class OrganisationTransactionService {
 
         BigDecimal cryptoOwned = organisation.getCrypto().get(symbol);
         if(amountPLN.compareTo(organisation.getMoney())==1){ throw new NotEnoughFundsException();}
-        BigDecimal price = cryptoStockClient.getCoins(symbol).get(0).getPrice();
+        Coin coin = cryptoStockClient.getCoins(symbol).get(0);
+        BigDecimal price = coin.getPrice();
         BigDecimal cryptoToAdd = amountPLN.divide(price, 8, RoundingMode.HALF_EVEN);
         System.out.println(cryptoToAdd);
         if(cryptoOwned != null){
