@@ -41,7 +41,6 @@ public class UserDto {
     private String group_name;
 
     @JsonProperty("wallet")
-    //private List<WalletDto> crypto;
     private Map<String, BigDecimal> crypto;
 
 }

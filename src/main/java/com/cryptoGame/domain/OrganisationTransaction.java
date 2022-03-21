@@ -1,9 +1,6 @@
 package com.cryptoGame.domain;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
@@ -13,21 +10,22 @@ import java.time.LocalDate;
 @Table(name = "organisation_transactions")
 @Getter
 @Setter
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
 public class OrganisationTransaction {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "transaction_id", nullable = false)
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    @Column(name = "transaction_id", nullable = false, unique = true)
     private Long id;
 
     @OneToOne
-    @JoinColumn(name = "user_id", unique = true)
+    @JoinColumn(name = "user_id")
     private User user;
 
     @OneToOne
-    @JoinColumn(name = "organisation_name", referencedColumnName = "organisation_name", unique = true)
+    @JoinColumn(name = "organisation_name", referencedColumnName = "organisation_name")
     private Organisation organisation;
 
     @Column(name = "transaction_date")
@@ -45,13 +43,4 @@ public class OrganisationTransaction {
     @Column(name = "worth_now")
     private BigDecimal worthNow;
 
-
-    public OrganisationTransaction(User user, LocalDate transactionDate, String cryptoSymbol, BigDecimal cryptoAmount, BigDecimal money) {
-        this.user = user;
-        this.organisation = user.getOrganisation();
-        this.transactionDate = transactionDate;
-        this.cryptoSymbol = cryptoSymbol;
-        this.cryptoAmount = cryptoAmount;
-        this.money = money;
-    }
 }

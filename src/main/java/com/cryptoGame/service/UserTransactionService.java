@@ -47,7 +47,13 @@ public class UserTransactionService {
         }
         user.setMoney(user.getMoney().subtract(amountPLN));
 
-        UserTransaction transactionToSave = new UserTransaction(transaction.getUser(), LocalDate.now(), symbol, cryptoToAdd, amountPLN.negate());
+        UserTransaction transactionToSave = UserTransaction.builder()
+                .user(transaction.getUser())
+                .transactionDate(LocalDate.now())
+                .cryptoSymbol(symbol)
+                .cryptoAmount(cryptoToAdd)
+                .money(amountPLN.negate()).build();
+
         userRepository.save(user);
         transactionRepository.save(transactionToSave);
 
@@ -71,7 +77,13 @@ public class UserTransactionService {
         user.setMoney(user.getMoney().add(moneyToAdd));
         user.addCrypto(symbol, amountCrypto.negate());
 
-        UserTransaction transactionToSave = new UserTransaction(user, LocalDate.now(), symbol, amountCrypto.negate(), moneyToAdd);
+        UserTransaction transactionToSave = UserTransaction.builder()
+                .user(user)
+                .transactionDate(LocalDate.now())
+                .cryptoSymbol(symbol)
+                .cryptoAmount(amountCrypto.negate())
+                .money(moneyToAdd).build();
+
         transactionRepository.save(transactionToSave);
         userRepository.save(user);
 

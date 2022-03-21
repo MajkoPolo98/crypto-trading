@@ -44,8 +44,14 @@ public class OrganisationTransactionService {
         }
         organisation.setMoney(organisation.getMoney().subtract(amountPLN));
 
-        OrganisationTransaction transactionToSave = new OrganisationTransaction(
-                transaction.getUser(), LocalDate.now(), symbol, cryptoToAdd, amountPLN.negate());
+        OrganisationTransaction transactionToSave = OrganisationTransaction.builder()
+                .user(transaction.getUser())
+                .organisation(transaction.getUser().getOrganisation()) //Added
+                .transactionDate(LocalDate.now())
+                .cryptoSymbol(symbol)
+                .cryptoAmount(cryptoToAdd)
+                .money(amountPLN.negate()).build();
+
         organisationRepository.save(organisation);
         transactionRepository.save(transactionToSave);
 
@@ -68,7 +74,14 @@ public class OrganisationTransactionService {
         organisation.setMoney(organisation.getMoney().add(moneyToAdd));
         organisation.addCrypto(symbol, amountCrypto.negate());
 
-        OrganisationTransaction transactionToSave = new OrganisationTransaction(transaction.getUser(), LocalDate.now(), symbol, amountCrypto.negate(), moneyToAdd);
+        OrganisationTransaction transactionToSave = OrganisationTransaction.builder()
+                .user(transaction.getUser())
+                .organisation(transaction.getUser().getOrganisation())
+                .transactionDate(LocalDate.now())
+                .cryptoSymbol(symbol)
+                .cryptoAmount(amountCrypto.negate())
+                .money(moneyToAdd).build();
+
         transactionRepository.save(transactionToSave);
         organisationRepository.save(organisation);
 

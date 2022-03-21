@@ -1,9 +1,6 @@
 package com.cryptoGame.domain;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
@@ -13,6 +10,7 @@ import java.time.LocalDate;
 @Table(name = "user_transactions")
 @Getter
 @Setter
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
 public class UserTransaction {
@@ -40,11 +38,5 @@ public class UserTransaction {
 
     @Column(name = "worth_now")
     private BigDecimal worthNow;
-    public UserTransaction(User user, LocalDate transactionDate, String cryptoSymbol, BigDecimal cryptoAmount, BigDecimal money) {
-        this.user = user;
-        this.transactionDate = transactionDate;
-        this.cryptoSymbol = cryptoSymbol;
-        this.cryptoAmount = cryptoAmount;
-        this.money = money;
-    }
+
 }

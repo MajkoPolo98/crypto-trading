@@ -17,10 +17,12 @@ public class OrganisationMapper {
     private UserRepository repository;
 
     public Organisation mapToOrganisation(OrganisationDto dto){
-        Organisation organisation = new Organisation(dto.getId(),
-                dto.getGroupName(),
-                dto.getGroupFunds(),
-                dto.getCrypto());
+        Organisation organisation = Organisation.builder()
+                .id(dto.getId())
+                .groupName(dto.getGroupName())
+                .money(dto.getGroupFunds())
+                .crypto(dto.getCrypto()).build();
+
         for(User user: dto.getUsers().stream().map(id -> repository.findById(id).get()).collect(Collectors.toList())){
             user.setOrganisation(organisation);
         }

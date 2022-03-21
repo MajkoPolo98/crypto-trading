@@ -1,10 +1,7 @@
 package com.cryptoGame.domain;
 
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -15,6 +12,7 @@ import java.util.Map;
 @Entity
 @Getter
 @Setter
+@Builder
 @Table(name = "organisations")
 @NoArgsConstructor
 @AllArgsConstructor
@@ -52,14 +50,4 @@ public class Organisation implements Serializable {
         crypto.put(symbol, crypto.get(symbol).add(value));
     }
 
-    public Organisation(Long id, String groupName, BigDecimal money, Map<String, BigDecimal> crypto) {
-        this.id = id;
-        this.groupName = groupName;
-        this.money = money;
-        this.crypto = crypto;
-    }
-
-    public void addUserToOrganisation(User user){
-        users.add(user);
-    }
 }
