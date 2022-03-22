@@ -36,8 +36,6 @@ public class OrganisationTransactionMapper {
     }
 
     public OrganisationTransactionDto mapToTransactionDto(OrganisationTransaction transaction){
-        System.out.println(transaction.getUser().getUserName());
-        System.out.println(transaction.getOrganisation().getGroupName());
         return new OrganisationTransactionDto(transaction.getId(),
                 transaction.getUser().getId(),
                 transaction.getOrganisation().getGroupName(),

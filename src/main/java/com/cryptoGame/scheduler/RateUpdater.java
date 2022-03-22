@@ -79,21 +79,4 @@ public class RateUpdater {
                 }));
     }
 
-/*    @Scheduled(cron = cron)
-    public void updateOrganisationValue(){
-        List<Organisation> organisations = organisationRepository.findAll();
-
-        Map<String, CoinDto> coinMap = new HashMap<>();
-        for(CoinDto coin: coins){
-            coinMap.put(coin.getSymbol(), coin);
-        }
-        for(Organisation organisation: organisations){
-            BigDecimal value = organisation.getMoney();
-            for(Map.Entry<String, BigDecimal> entry: organisation.getCrypto().entrySet()){
-                value = value.add(coinMap.get(entry.getKey()).getPrice().multiply(entry.getValue()));
-            }
-            organisation.setValue(value);
-            userRepository.save(user);
-        }
-    }*/
 }

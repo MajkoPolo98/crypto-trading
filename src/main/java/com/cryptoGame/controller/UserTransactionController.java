@@ -1,5 +1,6 @@
 package com.cryptoGame.controller;
 
+import com.cryptoGame.domain.Coin;
 import com.cryptoGame.domain.UserTransaction;
 import com.cryptoGame.domain.dtos.CoinDto;
 import com.cryptoGame.domain.dtos.UserTransactionDto;
@@ -26,9 +27,7 @@ public class UserTransactionController {
 
     private final UserTransactionService service;
     private final UserTransactionMapper mapper;
-    private final CoinMapper coinMapper;
     private final CoinRepository coinRepository;
-    private final NomicsClient client;
 
     @PostMapping("/user/transactions/buy")
     private UserTransactionDto buyCrypto(@RequestBody final UserTransactionDto dto) throws UserNotFoundException, NotEnoughFundsException, CoinNotFoundException {
@@ -44,11 +43,10 @@ public class UserTransactionController {
     private List<UserTransactionDto> getAllTransactions(){
         List<UserTransaction> transactions = service.getAllTransactions();
         List<String> cryptoSymbols = transactions.stream().map(UserTransaction::getCryptoSymbol).collect(Collectors.toList());
-        //List<CoinDto> coinDtos =  client.getCoins(String.join(",", cryptoSymbols));
-        List<CoinDto> coinDtos = coinMapper.mapToCoinDtoList(coinRepository.findAll());
+        List<Coin> coins = coinRepository.findAll();
         transactions.forEach(transaction -> transaction
-                .setWorthNow(coinDtos.stream()
-                        .filter(coinDto -> coinDto.getSymbol().equals(transaction.getCryptoSymbol()))
+                .setWorthNow(coins.stream()
+                        .filter(coin -> coin.getSymbol().equals(transaction.getCryptoSymbol()))
                         .findFirst().get().getPrice().multiply(transaction.getCryptoAmount())));
         transactions.forEach(service::saveTransaction);
         return mapper.mapToTransactionDtoList(transactions);
@@ -58,12 +56,11 @@ public class UserTransactionController {
     private List<UserTransactionDto> getUserTransactions(@PathVariable("userId") Long userId){
         List<UserTransaction> transactions = service.getAllTransactions().stream().filter(transaction -> transaction.getUser().getId().equals(userId)).collect(Collectors.toList());
         List<String> cryptoSymbols = transactions.stream().map(UserTransaction::getCryptoSymbol).collect(Collectors.toList());
-        //List<CoinDto> coinDtos =  client.getCoins(String.join(",", cryptoSymbols));
-        List<CoinDto> coinDtos = coinMapper.mapToCoinDtoList(coinRepository.findAll());
+        List<Coin> coins = coinRepository.findAll();
         transactions.stream()
                 .forEach(transaction -> transaction
-                .setWorthNow(coinDtos.stream()
-                        .filter(coinDto -> coinDto.getSymbol().equals(transaction.getCryptoSymbol()))
+                .setWorthNow(coins.stream()
+                        .filter(coin -> coin.getSymbol().equals(transaction.getCryptoSymbol()))
                         .findFirst().get().getPrice().multiply(transaction.getCryptoAmount())));
         transactions.forEach(service::saveTransaction);
         return mapper.mapToTransactionDtoList(transactions);

@@ -6,6 +6,8 @@ import com.cryptoGame.domain.UserTransaction;
 import com.cryptoGame.exceptions.NotEnoughFundsException;
 import com.cryptoGame.exceptions.TransactionNotFoundException;
 import com.cryptoGame.externalApis.cryptoStock.CryptoStockClient;
+import com.cryptoGame.externalApis.cryptoStock.nomics.NomicsFacade;
+import com.cryptoGame.mapper.CoinMapper;
 import com.cryptoGame.repository.CoinRepository;
 import com.cryptoGame.repository.UserRepository;
 import com.cryptoGame.repository.UserTransactionRepository;
@@ -24,8 +26,7 @@ public class UserTransactionService {
     private final UserTransactionRepository transactionRepository;
     private final UserRepository userRepository;
     private final CoinRepository coinRepository;
-
-    private final CryptoStockClient cryptoStockClient;
+    private final NomicsFacade facade;
 
     public UserTransaction buyCrypto (UserTransaction transaction) throws
             NotEnoughFundsException {
@@ -35,8 +36,7 @@ public class UserTransactionService {
 
         BigDecimal cryptoOwned = user.getCrypto().get(symbol);
         if(amountPLN.compareTo(user.getMoney())==1){ throw new NotEnoughFundsException();}
-        Coin coin = cryptoStockClient.getCoins(symbol).get(0);
-        System.out.println(coin.getSymbol() + "XOXOXOXOX");
+        Coin coin = facade.getCoins(symbol).get(0);
         coinRepository.save(coin);
         BigDecimal price = coin.getPrice();
         BigDecimal cryptoToAdd = amountPLN.divide(price, 8, RoundingMode.HALF_EVEN);
@@ -72,7 +72,7 @@ public class UserTransactionService {
         BigDecimal cryptoOwned = user.getCrypto().get(symbol);
         if(amountCrypto.compareTo(cryptoOwned)==1){ throw new NotEnoughFundsException();}
 
-        BigDecimal price = cryptoStockClient.getCoins(symbol).get(0).getPrice();
+        BigDecimal price = facade.getCoins(symbol).get(0).getPrice();
         BigDecimal moneyToAdd = amountCrypto.multiply(price);
         user.setMoney(user.getMoney().add(moneyToAdd));
         user.addCrypto(symbol, amountCrypto.negate());

@@ -6,6 +6,8 @@ import com.cryptoGame.domain.OrganisationTransaction;
 import com.cryptoGame.exceptions.NotEnoughFundsException;
 import com.cryptoGame.exceptions.TransactionNotFoundException;
 import com.cryptoGame.externalApis.cryptoStock.CryptoStockClient;
+import com.cryptoGame.externalApis.cryptoStock.nomics.NomicsFacade;
+import com.cryptoGame.mapper.CoinMapper;
 import com.cryptoGame.repository.OrganisationRepository;
 import com.cryptoGame.repository.OrganisationTransactionRepository;
 import lombok.RequiredArgsConstructor;
@@ -22,8 +24,7 @@ public class OrganisationTransactionService {
 
     private final OrganisationTransactionRepository transactionRepository;
     private final OrganisationRepository organisationRepository;
-
-    private final CryptoStockClient cryptoStockClient;
+    private final NomicsFacade facade;
 
     public OrganisationTransaction buyCrypto (OrganisationTransaction transaction) throws
             NotEnoughFundsException {
@@ -33,7 +34,7 @@ public class OrganisationTransactionService {
 
         BigDecimal cryptoOwned = organisation.getCrypto().get(symbol);
         if(amountPLN.compareTo(organisation.getMoney())==1){ throw new NotEnoughFundsException();}
-        Coin coin = cryptoStockClient.getCoins(symbol).get(0);
+        Coin coin = facade.getCoins(symbol).get(0);
         BigDecimal price = coin.getPrice();
         BigDecimal cryptoToAdd = amountPLN.divide(price, 8, RoundingMode.HALF_EVEN);
         System.out.println(cryptoToAdd);
@@ -69,7 +70,7 @@ public class OrganisationTransactionService {
         BigDecimal cryptoOwned = organisation.getCrypto().get(symbol);
         if(amountCrypto.compareTo(cryptoOwned)==1){ throw new NotEnoughFundsException();}
 
-        BigDecimal price = cryptoStockClient.getCoins(symbol).get(0).getPrice();
+        BigDecimal price = facade.getCoins(symbol).get(0).getPrice();
         BigDecimal moneyToAdd = amountCrypto.multiply(price);
         organisation.setMoney(organisation.getMoney().add(moneyToAdd));
         organisation.addCrypto(symbol, amountCrypto.negate());

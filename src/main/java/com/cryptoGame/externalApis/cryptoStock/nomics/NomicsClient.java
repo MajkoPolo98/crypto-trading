@@ -29,7 +29,7 @@ public class NomicsClient implements CryptoStockClient {
     private static final Logger LOGGER = LoggerFactory.getLogger(NomicsClient.class);
 
     @Override
-    public List<Coin> getCoins(String... coinSymbols) {
+    public List<CoinDto> getCoins(String... coinSymbols) {
         URI url = UriComponentsBuilder.fromHttpUrl(
                         config.getNomicsApi() + "/currencies/ticker?per-page=100&page=1")
                 .queryParam("convert", ipApi.getUserLocation().getCurrency())
@@ -38,7 +38,7 @@ public class NomicsClient implements CryptoStockClient {
                 .build().encode().toUri();
 
         try {
-            Coin[] response = restTemplate.getForObject(url, Coin[].class);
+            CoinDto[] response = restTemplate.getForObject(url, CoinDto[].class);
             return Optional.ofNullable(response)
                     .map(Arrays::asList)
                     .orElse(Collections.emptyList())
