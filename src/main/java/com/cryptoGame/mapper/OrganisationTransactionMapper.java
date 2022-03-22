@@ -1,10 +1,7 @@
 package com.cryptoGame.mapper;
 
 import com.cryptoGame.domain.OrganisationTransaction;
-import com.cryptoGame.domain.User;
 import com.cryptoGame.domain.dtos.OrganisationTransactionDto;
-import com.cryptoGame.exceptions.OrganisationNotFoundException;
-import com.cryptoGame.externalApis.cryptoStock.CryptoStockClient;
 import com.cryptoGame.repository.OrganisationRepository;
 import com.cryptoGame.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -3,7 +3,6 @@ package com.cryptoGame.scheduler;
 import com.cryptoGame.controller.StockController;
 import com.cryptoGame.domain.*;
 import com.cryptoGame.domain.dtos.CoinDto;
-import com.cryptoGame.externalApis.cryptoStock.CryptoStockClient;
 import com.cryptoGame.mapper.CoinMapper;
 import com.cryptoGame.repository.*;
 import lombok.Getter;
@@ -17,7 +16,6 @@ import java.math.BigDecimal;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 import java.util.stream.Collectors;
 
 @Component

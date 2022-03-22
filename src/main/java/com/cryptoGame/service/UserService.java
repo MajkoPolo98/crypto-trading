@@ -1,10 +1,8 @@
 package com.cryptoGame.service;
 
 import com.cryptoGame.domain.User;
-import com.cryptoGame.exceptions.CoinNotFoundException;
 import com.cryptoGame.exceptions.NotEnoughFundsException;
 import com.cryptoGame.exceptions.UserNotFoundException;
-import com.cryptoGame.externalApis.cryptoStock.CryptoStockClient;
 import com.cryptoGame.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,9 +14,6 @@ import java.util.List;
 @Service
 @RequiredArgsConstructor
 public class UserService {
-
-    @Autowired
-    private CryptoStockClient cryptoStockClient;
 
     @Autowired
     private UserRepository repository;

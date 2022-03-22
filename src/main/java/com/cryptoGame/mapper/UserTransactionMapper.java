@@ -3,7 +3,6 @@ package com.cryptoGame.mapper;
 import com.cryptoGame.domain.UserTransaction;
 import com.cryptoGame.domain.dtos.UserTransactionDto;
 import com.cryptoGame.exceptions.UserNotFoundException;
-import com.cryptoGame.externalApis.cryptoStock.CryptoStockClient;
 import com.cryptoGame.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -15,8 +14,6 @@ import java.util.stream.Collectors;
 @Service
 public class UserTransactionMapper {
 
-    @Autowired
-    private CryptoStockClient client;
     @Autowired
     private UserRepository userRepository;
 
