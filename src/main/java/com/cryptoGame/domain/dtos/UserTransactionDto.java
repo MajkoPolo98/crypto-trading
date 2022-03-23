@@ -27,12 +27,12 @@ public class UserTransactionDto {
     private String cryptoSymbol;
 
     @JsonProperty("crypto_amount")
-    private String cryptoAmount;
+    private BigDecimal cryptoAmount;
 
     @JsonProperty("money")
-    private String money;
+    private BigDecimal money;
 
     @JsonProperty("worth_now")
-    private String worthNow;
+    private BigDecimal worthNow;
 
 }

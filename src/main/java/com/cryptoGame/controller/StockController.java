@@ -24,9 +24,9 @@ public class StockController {
 
     private final NomicsClient nomicsClient;
     private final NomicsConfig config;
+    private final NomicsFacade facade;
     private final CoinMapper coinMapper;
     private final CoinRepository coinRepository;
-    private final OrganisationTransactionRepository organisationTransactionRepository;
 
     @GetMapping("/stock")
     public List<CoinDto> getCurrencies(){
@@ -46,7 +46,7 @@ public class StockController {
 
     @GetMapping("/stock/all")
     public List<CoinDto> getAllUsedCoins(){
-        return coinMapper.mapToCoinDtoList(coinRepository.findAll());
+        return facade.getCoins();
     }
 
 }

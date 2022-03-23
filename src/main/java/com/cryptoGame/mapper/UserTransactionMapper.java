@@ -23,11 +23,11 @@ public class UserTransactionMapper {
         transaction.setUser(userRepository.findById(dto.getUser_id()).orElseThrow(UserNotFoundException::new));
         transaction.setTransactionDate(dto.getTransactionDate());
         transaction.setCryptoSymbol(dto.getCryptoSymbol());
-        String cryptoAmount = dto.getCryptoAmount();
+        BigDecimal cryptoAmount = dto.getCryptoAmount();
         if(cryptoAmount==null){
-            transaction.setMoney(new BigDecimal(dto.getMoney()));
+            transaction.setMoney(dto.getMoney());
         } else {
-            transaction.setCryptoAmount(new BigDecimal(cryptoAmount));
+            transaction.setCryptoAmount(cryptoAmount);
         }
         return transaction;
 
@@ -39,9 +39,9 @@ public class UserTransactionMapper {
                 transaction.getUser().getId(),
                 transaction.getTransactionDate(),
                 transaction.getCryptoSymbol(),
-                String.valueOf(transaction.getCryptoAmount()),
-                String.valueOf(transaction.getMoney()),
-                String.valueOf(transaction.getWorthNow()));
+                transaction.getCryptoAmount(),
+                transaction.getMoney(),
+                transaction.getWorthNow());
     }
 
     public List<UserTransactionDto> mapToTransactionDtoList(final List<UserTransaction> transactions){

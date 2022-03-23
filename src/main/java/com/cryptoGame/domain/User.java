@@ -1,10 +1,7 @@
 package com.cryptoGame.domain;
 
 import com.cryptoGame.exceptions.NotEnoughFundsException;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
@@ -14,6 +11,7 @@ import java.util.Map;
 @Getter
 @Setter
 @Table(name = "users")
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
 public class User {

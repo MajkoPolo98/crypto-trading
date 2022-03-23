@@ -31,24 +31,24 @@ public class UserController {
     private final OrganisationMapper organisationMapper;
 
     @PostMapping(value = "/user", consumes = MediaType.APPLICATION_JSON_VALUE)
-    private void addUser(@RequestBody final UserDto userDto){
+    public void addUser(@RequestBody final UserDto userDto){
         service.saveUser(mapper.mapToUser(userDto));
     }
 
     @PutMapping(value = "/user", consumes = MediaType.APPLICATION_JSON_VALUE)
-    private UserDto changeData(@RequestBody final UserDto userDto){
+    public UserDto changeData(@RequestBody final UserDto userDto){
         User user = mapper.mapToUser(userDto);
         User savedUser = service.saveUser(user);
         return mapper.mapToUserDto(savedUser);
     }
 
     @DeleteMapping(value = "/user/{userId}")
-    private void removeUser(@PathVariable("userId") Long userId) throws UserNotFoundException {
+    public void removeUser(@PathVariable("userId") Long userId) throws UserNotFoundException {
         service.removeUser(userId);
     }
 
     @PutMapping(value = "/user/{userId}/{moneyAmount}")
-    private UserDto addMoney(@PathVariable("userId") Long userId, @PathVariable("moneyAmount") BigDecimal moneyAmount) throws UserNotFoundException{
+    public UserDto addMoney(@PathVariable("userId") Long userId, @PathVariable("moneyAmount") BigDecimal moneyAmount) throws UserNotFoundException{
         User user = service.findUser(userId);
         user.setMoney(user.getMoney().add(moneyAmount));
         User savedUser = service.saveUser(user);
@@ -56,22 +56,22 @@ public class UserController {
     }
 
     @GetMapping(value = "/user")
-    private List<UserDto> getAllUsers(){
+    public List<UserDto> getAllUsers(){
         return mapper.mapToUserDtoList(service.getAllUsers());
     }
 
     @GetMapping(value = "/user/find/{name}")
-    private UserDto getUserByName(@PathVariable("name") String name) throws UserNotFoundException{
+    public UserDto getUserByName(@PathVariable("name") String name) throws UserNotFoundException{
         return mapper.mapToUserDto(service.findUserByName(name));
     }
 
     @GetMapping(value = "/user/{userId}")
-    private UserDto getUser(@PathVariable("userId") Long userId) throws UserNotFoundException{
+    public UserDto getUser(@PathVariable("userId") Long userId) throws UserNotFoundException{
         return mapper.mapToUserDto(service.findUser(userId));
     }
 
     @PutMapping(value = "/user/organisation", consumes = MediaType.APPLICATION_JSON_VALUE)
-    private OrganisationDto giveMoneyToOrganisation(@RequestBody Map<String, BigDecimal> json) throws NotEnoughFundsException, UserNotFoundException {
+    public OrganisationDto giveMoneyToOrganisation(@RequestBody Map<String, BigDecimal> json) throws NotEnoughFundsException, UserNotFoundException {
         Long userId = json.get("user_id").longValue();
         BigDecimal amount = json.get("amount");
         service.sendMoneyToOrganisation(userId, amount);
@@ -80,7 +80,7 @@ public class UserController {
     }
 
     @PutMapping(value = "/user/{userId}/organisation/{organisationId}")
-    private OrganisationDto joinOrganisation(@PathVariable("organisationId") Long organisationId, @PathVariable("userId") Long userId) throws
+    public OrganisationDto joinOrganisation(@PathVariable("organisationId") Long organisationId, @PathVariable("userId") Long userId) throws
             UserNotFoundException, OrganisationNotFoundException {
         User user = service.findUser(userId);
         Organisation organisation = organisationService.findOrganisation(organisationId);

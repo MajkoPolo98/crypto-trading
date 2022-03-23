@@ -27,15 +27,10 @@ public class UserMapper {
                 dto.getMoney(),
                 dto.getValue(),
                 orgRepository.findByGroupName(dto.getGroup_name()).orElse(null),
-                //crypto);
                 dto.getCrypto());
     }
 
     public UserDto mapToUserDto(User user){
-/*        List<WalletDto> crypto = new ArrayList<>();
-        for(Map.Entry<String, BigDecimal> entry: user.getCrypto().entrySet()){
-            crypto.add(new WalletDto(entry.getKey(), entry.getValue()));
-        }*/
 
         UserDto dto = new UserDto(user.getId(),
                 user.getUserName(),
@@ -45,7 +40,6 @@ public class UserMapper {
                 user.getMoney(),
                 user.getValue(),
                 null,
-                //crypto);
                 user.getCrypto());
         if(user.getOrganisation() != null){
             dto.setGroup_name(user.getOrganisation().getGroupName());
