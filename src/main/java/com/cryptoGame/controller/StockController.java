@@ -36,12 +36,7 @@ public class StockController {
 
     @GetMapping("/stock/{symbol}")
     public CoinDto getCurrency(@PathVariable("symbol") String symbols){
-        return nomicsClient.getCoins(symbols).get(0);
-    }
-
-    @PostMapping("/stock/select")
-    public List<CoinDto> getSelectedCurrencies(@RequestBody List<String> symbols){
-        return nomicsClient.getCoins(symbols.stream().collect(Collectors.joining(",")));
+        return nomicsClient.getCoins(symbols.toUpperCase()).get(0);
     }
 
     @GetMapping("/stock/all")
