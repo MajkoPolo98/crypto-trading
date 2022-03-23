@@ -28,7 +28,4 @@ public class CoinMapper {
         return coins.stream().map(this::mapToCoinDto).collect(Collectors.toList());
     }
 
-    public List<Coin> mapToCoinList(List<CoinDto> coins){
-        return coins.stream().map(this::mapToCoin).collect(Collectors.toList());
-    }
 }

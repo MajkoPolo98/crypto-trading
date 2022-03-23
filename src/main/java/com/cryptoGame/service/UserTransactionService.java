@@ -6,7 +6,6 @@ import com.cryptoGame.domain.UserTransaction;
 import com.cryptoGame.exceptions.NotEnoughFundsException;
 import com.cryptoGame.exceptions.TransactionNotFoundException;
 import com.cryptoGame.externalApis.cryptoStock.nomics.NomicsClient;
-import com.cryptoGame.externalApis.cryptoStock.nomics.NomicsFacade;
 import com.cryptoGame.mapper.CoinMapper;
 import com.cryptoGame.repository.CoinRepository;
 import com.cryptoGame.repository.UserRepository;

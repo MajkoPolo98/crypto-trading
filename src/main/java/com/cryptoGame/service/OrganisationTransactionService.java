@@ -1,5 +1,6 @@
 package com.cryptoGame.service;
 
+import com.cryptoGame.domain.Coin;
 import com.cryptoGame.domain.Organisation;
 import com.cryptoGame.domain.OrganisationTransaction;
 import com.cryptoGame.domain.dtos.CoinDto;
@@ -7,6 +8,8 @@ import com.cryptoGame.exceptions.NotEnoughFundsException;
 import com.cryptoGame.exceptions.TransactionNotFoundException;
 import com.cryptoGame.externalApis.cryptoStock.nomics.NomicsClient;
 import com.cryptoGame.externalApis.cryptoStock.nomics.NomicsFacade;
+import com.cryptoGame.mapper.CoinMapper;
+import com.cryptoGame.repository.CoinRepository;
 import com.cryptoGame.repository.OrganisationRepository;
 import com.cryptoGame.repository.OrganisationTransactionRepository;
 import lombok.RequiredArgsConstructor;
@@ -23,6 +26,8 @@ public class OrganisationTransactionService {
 
     private final OrganisationTransactionRepository transactionRepository;
     private final OrganisationRepository organisationRepository;
+    private final CoinRepository coinRepository;
+    private final CoinMapper coinMapper;
     private final NomicsClient client;
 
     public OrganisationTransaction buyCrypto (OrganisationTransaction transaction) throws
@@ -33,8 +38,9 @@ public class OrganisationTransactionService {
 
         BigDecimal cryptoOwned = organisation.getCrypto().get(symbol);
         if(amountPLN.compareTo(organisation.getMoney())==1){ throw new NotEnoughFundsException();}
-        CoinDto coinDto = client.getCoins(symbol).get(0);
-        BigDecimal price = coinDto.getPrice();
+        Coin coin = coinMapper.mapToCoin(client.getCoins(symbol).get(0));
+        coinRepository.save(coin);
+        BigDecimal price = coin.getPrice();
         BigDecimal cryptoToAdd = amountPLN.divide(price, 8, RoundingMode.HALF_EVEN);
         if(cryptoOwned != null){
             organisation.addCrypto(symbol, cryptoToAdd);
