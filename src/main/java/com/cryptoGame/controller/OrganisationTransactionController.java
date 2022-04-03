@@ -2,13 +2,9 @@ package com.cryptoGame.controller;
 
 import com.cryptoGame.domain.Coin;
 import com.cryptoGame.domain.OrganisationTransaction;
-import com.cryptoGame.domain.dtos.CoinDto;
 import com.cryptoGame.domain.dtos.OrganisationTransactionDto;
-import com.cryptoGame.exceptions.CoinNotFoundException;
 import com.cryptoGame.exceptions.NotEnoughFundsException;
 import com.cryptoGame.exceptions.TransactionNotFoundException;
-import com.cryptoGame.externalApis.cryptoStock.nomics.NomicsClient;
-import com.cryptoGame.mapper.CoinMapper;
 import com.cryptoGame.mapper.OrganisationTransactionMapper;
 import com.cryptoGame.repository.CoinRepository;
 import com.cryptoGame.service.OrganisationTransactionService;

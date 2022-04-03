@@ -49,7 +49,7 @@ public class User {
             joinColumns = {@JoinColumn(name = "user_id")}
     )
     @MapKeyColumn(name = "cryptocurrency")
-    @Column(name = "amount", precision = 8, scale = 8)
+    @Column(name = "amount", scale = 8)
     private Map<String, BigDecimal> crypto;
 
     public void addCrypto(String symbol, BigDecimal value){

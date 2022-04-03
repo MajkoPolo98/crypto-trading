@@ -8,6 +8,7 @@ import com.cryptoGame.repository.*;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
@@ -22,7 +23,6 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 @Setter
 @Getter
-@Transactional
 public class RateUpdater {
 
     private final StockController stock;
@@ -32,8 +32,10 @@ public class RateUpdater {
     private final UserTransactionRepository userTransactionRepository;
     private final OrganisationTransactionRepository organisationTransactionRepository;
     private List<CoinDto> coins;
-    private final String cron = "*/20 * * * * *";
+    private final String cron = "*/50 * * * * *";
 
+    @Transactional
+    @Modifying
     @Scheduled(cron = cron)
     public void updateRates() {
         List<String> usedSymbols = stock.getAllUsedCoins().stream().map(CoinDto::getSymbol).collect(Collectors.toList());

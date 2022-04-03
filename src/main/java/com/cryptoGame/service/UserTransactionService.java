@@ -11,8 +11,10 @@ import com.cryptoGame.repository.CoinRepository;
 import com.cryptoGame.repository.UserRepository;
 import com.cryptoGame.repository.UserTransactionRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.time.LocalDate;
@@ -27,6 +29,7 @@ public class UserTransactionService {
     private final CoinRepository coinRepository;
     private final NomicsClient client;
     private final CoinMapper mapper;
+
 
     public UserTransaction buyCrypto (UserTransaction transaction) throws
             NotEnoughFundsException {

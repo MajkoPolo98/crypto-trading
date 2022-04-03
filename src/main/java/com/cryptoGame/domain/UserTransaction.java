@@ -30,7 +30,7 @@ public class UserTransaction {
     @Column(name = "crypto_symbol", nullable = false)
     private String cryptoSymbol;
 
-    @Column(name = "crypto_amount", precision = 8, scale = 8)
+    @Column(name = "crypto_amount", scale = 8)
     private BigDecimal cryptoAmount;
 
     @Column(name = "money")

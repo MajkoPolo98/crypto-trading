@@ -12,7 +12,6 @@ import java.util.List;
 @Component
 @AllArgsConstructor
 public class NomicsFacade {
-    private final NomicsClient nomicsClient;
     private final CoinMapper coinMapper;
     private final CoinRepository repository;
 
